@@ -24,8 +24,7 @@ SELECT *  FROM board_tbl ORDER BY bno DESC;
 
 DELETE FROM board_tbl WHERE bno = 24;
 
-UPDATE board_tbl SET title = '새로넣는글(수정)', content = '본문(수정)' WHERE bno = 21;
+UPDATE board_tbl SET title = '새로넣는글(수정)', content = '본문(수정)', updatedate = sysdate WHERE bno = 21;
 
-select * from board_tbl where bno = 1;
   
  
