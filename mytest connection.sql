@@ -30,6 +30,9 @@ INSERT INTO board_tbl (bno, title, content, writer)
 SELECT /*+ INDEX_DESC(board_tbl pk_board) */
 ROWNUM rn, board_tbl.* FROM board_tbl WHERE rownum <= 20; 
 
+-- ÀüÃ¼ ±Û °¹¼ö
+SELECT COUNT(*) FROM board_tbl;
+
 SELECT * FROM
 (SELECT /*+ INDEX_DESC(board_tbl pk_board) */
 ROWNUM rn, board_tbl.* FROM board_tbl WHERE rownum <= 20)
