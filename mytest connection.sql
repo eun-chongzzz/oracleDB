@@ -14,7 +14,7 @@ CREATE TABLE board_tbl (
 alter table board_tbl add constraint pk_board primary key(bno);
   
 INSERT INTO board_tbl (bno, title, content, writer) values 
-                  (board_num.nextval,'테스트글','테스트본문','글쓴이');
+                  (board_num.nextval,'대현이의글','대현이가쓴글','대현');
                   
 SELECT * FROM board_tbl;
 
@@ -37,4 +37,15 @@ SELECT * FROM
 (SELECT /*+ INDEX_DESC(board_tbl pk_board) */
 ROWNUM rn, board_tbl.* FROM board_tbl WHERE rownum <= 20)
 WHERE rn > 10;
+
+SELECT * FROM
+				(SELECT /*+ INDEX_DESC(board_tbl pk_board) */
+				ROWNUM rn, board_tbl.* FROM board_tbl WHERE 
+                (Title like '%'||'테'||'%') AND
+                ROWNUM <= 20)
+					WHERE rn > 10 ;
+
+SELECT COUNT(*) FROM board_tbl where (Title like '%'||'테'||'%');
+
+SELECT COUNT(*) FROM board_tbl WHERE bno > 0;
  
