@@ -62,10 +62,10 @@ CREATE table reply_tbl(
   
 create sequence reply_num;
 
-alter sequence reply_num nocache;
-
 alter table reply_tbl add constraint pk_reply primary key(rno);
 
 alter table reply_tbl add constraint fk_reply foreign key (bno) references board_tbl(bno);
+
+alter sequence reply_num nocache; -- ½ÃÄý½º 20¾¿ Æ¢´Â ¹®Á¦ ÇØ°á
 
 select * from reply_tbl;
