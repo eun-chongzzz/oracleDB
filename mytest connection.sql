@@ -30,20 +30,20 @@ INSERT INTO board_tbl (bno, title, content, writer)
 SELECT /*+ INDEX_DESC(board_tbl pk_board) */
 ROWNUM rn, board_tbl.* FROM board_tbl WHERE rownum <= 20; 
 
--- 전체 글 갯수
-SELECT COUNT(*) FROM board_tbl;
-
 SELECT * FROM
 (SELECT /*+ INDEX_DESC(board_tbl pk_board) */
 ROWNUM rn, board_tbl.* FROM board_tbl WHERE rownum <= 20)
 WHERE rn > 10;
 
+-- 전체 글 갯수
+SELECT COUNT(*) FROM board_tbl;
+
 SELECT * FROM
-				(SELECT /*+ INDEX_DESC(board_tbl pk_board) */
-				ROWNUM rn, board_tbl.* FROM board_tbl WHERE 
-                (Title like '%'||'테'||'%') AND
-                ROWNUM <= 20)
-					WHERE rn > 10 ;
+        	(SELECT /*+ INDEX_DESC(board_tbl pk_board) */
+            ROWNUM rn, board_tbl.* FROM board_tbl WHERE 
+             (Title like '%'||'테'||'%') AND
+              ROWNUM <= 20)
+            	WHERE rn > 10 ;
 
 SELECT COUNT(*) FROM board_tbl where (Title like '%'||'테'||'%');
 
