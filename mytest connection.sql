@@ -73,3 +73,6 @@ select * from reply_tbl;
 select * from reply_tbl where bno = 196636;
 
 DELETE FROM reply_tbl WHERE rno = 38;
+
+drop table board_tbl;
+drop table reply_tbl;
