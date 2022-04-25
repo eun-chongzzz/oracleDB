@@ -69,3 +69,7 @@ alter table reply_tbl add constraint fk_reply foreign key (bno) references board
 alter sequence reply_num nocache; -- ½ÃÄý½º 20¾¿ Æ¢´Â ¹®Á¦ ÇØ°á
 
 select * from reply_tbl;
+
+select * from reply_tbl where bno = 196636;
+
+DELETE FROM reply_tbl WHERE rno = 38;
