@@ -87,7 +87,9 @@ DELETE FROM novel_tbl WHERE novel_num = 1;
 
 -- 조회
 SELECT * FROM novel_tbl;
-
+UPDATE novel_tbl
+			SET
+		novel_title = '호랑이의 소설1', novel_tsnum = 16, novel_category = '멜로', novel_week ='금요일' WHERE novel_num = 1;
 
 -- ★유료소설★
 -- auto
@@ -117,10 +119,11 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '2', 10,'대현의소설1편','대현이는 소설을 정말 못써');
+                        (paid_num.nextval, '1', 10,'대현의소설1편','대현이는 소설을 정말 못써');
                         
 -- 조회
 SELECT * FROM paid_tbl;
+
 
 
 -- ★무료소설★
@@ -158,7 +161,7 @@ SELECT * FROM free_tbl;
                         
 -- ★자유게시판★
 -- auto
-CREATE SEQUENCE board_num;
+CREATE SEQUENCE free_board_num;
 
 CREATE TABLE free_board_tbl(
   free_board_num number(10,0) PRIMARY KEY,
