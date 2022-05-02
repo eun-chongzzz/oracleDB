@@ -16,7 +16,7 @@ alter table board_tbl add constraint pk_board primary key(bno);
 INSERT INTO board_tbl (bno, title, content, writer) values 
                   (board_num.nextval,'대현이의글','대현이가쓴글','대현');
                   
-SELECT * FROM board_tbl;
+SELECT * FROM board_tbl order by bno desc;
 
 SELECT
 /*+ INDEX_ASC(board_tbl pk_board) */
@@ -49,6 +49,13 @@ SELECT COUNT(*) FROM board_tbl where (Title like '%'||'테'||'%');
 
 SELECT COUNT(*) FROM board_tbl WHERE bno > 0;
  
+-- board_tbl 컬럼 추가하기
+alter table board_tbl add replycount int default 0;
+
+-- 댓글 달려있는 갯수 만큼 갱신
+update board_tbl set replycount = (select count(rno) from reply_tbl 
+where bno = board_tbl.bno) where bno > 0;
+ 
  
 -- 댓글 테이블
 CREATE table reply_tbl(
@@ -73,6 +80,9 @@ select * from reply_tbl;
 select * from reply_tbl where bno = 196636;
 
 DELETE FROM reply_tbl WHERE rno = 38;
+
+-- 댓글이 몇번 글에 달려있는지 조회
+select bno from reply_tbl where rno = 58;
 
 drop table board_tbl;
 drop table reply_tbl;
