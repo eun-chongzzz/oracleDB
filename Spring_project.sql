@@ -75,6 +75,9 @@ CREATE TABLE novel_tbl(
     novel_end char(1) default '0'
 );
 
+UPDATE novel_tbl SET 
+			novel_title = '호랑이', novel_tsnum = 10, novel_category = '액션', novel_week = '금요일', novel_end = 2 
+			WHERE novel_num = 1;
 -- 시퀀스 해결
 alter sequence novel_num nocache; 
 
@@ -124,8 +127,22 @@ INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) 
 -- 조회
 SELECT * FROM paid_tbl;
 
+-- inner join
+select * from novel_tbl n inner join paid_tbl p on n.novel_num = p.novel_num;
 
+select * from 
+    (select /*+ INDEX_DESC(paid_tbl pk_paid) */ 
+        ROWNUM rn, paid_tbl.* from paid_tbl where ROWNUM <= 5)  WHERE rn > 0;
 
+UPDATE paid_tbl	SET
+    paid_title = '대현이의소설10', paid_content = '소설을 잘쓰네', paid_mdate = SYSDATE, paid_price = 5000 
+				WHERE paid_num = 36;    
+
+delete from paid_tbl where paid_num = 1;
+
+delete from paid_tbl.paid_title p where exists (select 1 from novel_tbl n where p.novel_num = n.novel_num);
+
+delete from (select * from paid_tbl p inner join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = n.novel_num);
 -- ★무료소설★
 -- auto
 CREATE SEQUENCE free_num;

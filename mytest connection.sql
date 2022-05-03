@@ -38,6 +38,8 @@ WHERE rn > 10;
 -- 전체 글 갯수
 SELECT COUNT(*) FROM board_tbl;
 
+select * from board_tbl;
+
 SELECT * FROM
         	(SELECT /*+ INDEX_DESC(board_tbl pk_board) */
             ROWNUM rn, board_tbl.* FROM board_tbl WHERE 
@@ -80,6 +82,8 @@ select * from reply_tbl;
 select * from reply_tbl where bno = 196636;
 
 DELETE FROM reply_tbl WHERE rno = 38;
+
+delete from reply_tbl where bno = 196628;
 
 -- 댓글이 몇번 글에 달려있는지 조회
 select bno from reply_tbl where rno = 58;
