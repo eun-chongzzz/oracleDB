@@ -90,6 +90,13 @@ DELETE FROM novel_tbl WHERE novel_num = 24;
 
 -- 조회
 SELECT * FROM novel_tbl order by novel_num desc;
+
+SELECT * FROM
+(SELECT /*+ INDEX_DESC(novel_tbl pk_novel) */
+ROWNUM rn, novel_tbl.* FROM novel_tbl WHERE ROWNUM <= 5)
+					WHERE rn > 0;
+          
+
 UPDATE novel_tbl
 			SET
 		novel_title = '호랑이의 소설1', novel_tsnum = 16, novel_category = '멜로', novel_week ='금요일' WHERE novel_num = 1;
