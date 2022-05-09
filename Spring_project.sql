@@ -94,6 +94,8 @@ UPDATE novel_tbl
 			SET
 		novel_title = '호랑이의 소설1', novel_tsnum = 16, novel_category = '멜로', novel_week ='금요일' WHERE novel_num = 1;
 
+select * from novel_tbl where novel_week = 'mon' order by novel_num desc;
+
 -- ★유료소설★
 -- auto
 CREATE SEQUENCE paid_num;
@@ -122,13 +124,16 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '1', 10,'대현의소설1편','대현이는 소설을 정말 못써');
+                        (paid_num.nextval, '1', 4,'소설4편','test4');
                         
 -- 조회
 SELECT * FROM paid_tbl;
 
+SELECT f.free_num,n.novel_title,n.novel_writer,n.novel_num
+	 FROM free_tbl f INNER JOIN novel_tbl n ON f.novel_num = n.novel_num;
+
 -- inner join
-select * from novel_tbl n inner join paid_tbl p on n.novel_num = p.novel_num;
+select n.novel_num,n.novel_writer, p.paid_price from novel_tbl n inner join paid_tbl p on n.novel_num = p.novel_num;
 
 select * from 
     (select /*+ INDEX_DESC(paid_tbl pk_paid) */ 
