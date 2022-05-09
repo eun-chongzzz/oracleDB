@@ -83,13 +83,13 @@ alter sequence novel_num nocache;
 
 -- INSERT 예
 INSERT INTO novel_tbl (novel_num, novel_writer, novel_title, novel_tsnum, novel_category, novel_week) values
-                        (novel_num.nextval,'작가은총','은총이의소설',10, '액션', '금요일');
+                        (novel_num.nextval,'test4','test4',10, '액션', '금요일');
                         
 -- DELETE 예
-DELETE FROM novel_tbl WHERE novel_num = 1;
+DELETE FROM novel_tbl WHERE novel_num = 24;
 
 -- 조회
-SELECT * FROM novel_tbl;
+SELECT * FROM novel_tbl order by novel_num desc;
 UPDATE novel_tbl
 			SET
 		novel_title = '호랑이의 소설1', novel_tsnum = 16, novel_category = '멜로', novel_week ='금요일' WHERE novel_num = 1;
