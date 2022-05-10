@@ -90,7 +90,7 @@ DELETE FROM novel_tbl WHERE novel_num = 24;
 
 -- Á¶È¸
 SELECT * FROM novel_tbl order by novel_num desc;
-
+SELECT * FROM novel_tbl WHERE novel_end = 0;
 SELECT * FROM
 (SELECT /*+ INDEX_DESC(novel_tbl pk_novel) */
 ROWNUM rn, novel_tbl.* FROM novel_tbl WHERE ROWNUM <= 5)

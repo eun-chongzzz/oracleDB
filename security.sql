@@ -45,5 +45,7 @@ CREATE TABLE member_auth(
     constraint fk_member_auth foreign key(userid) references member_tbl(userid)
 );
 
+SELECT m.userid, userpw, username, enabled, regdate, updatedate, a.auth FROM member_tbl m LEFT 
+OUTER JOIN member_auth a on m.userid = a.userid WHERE m.userid = 'user25';
 select * from member_tbl;
 select * from member_auth;
