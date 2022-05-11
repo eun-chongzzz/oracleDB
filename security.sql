@@ -49,3 +49,20 @@ SELECT m.userid, userpw, username, enabled, regdate, updatedate, a.auth FROM mem
 OUTER JOIN member_auth a on m.userid = a.userid WHERE m.userid = 'user25';
 select * from member_tbl;
 select * from member_auth;
+
+
+-----------------------------------------------------
+
+-- 자동로그인
+CREATE TABLE persistent_logins(
+    username varchar(64) not null,
+    series varchar(64) primary key,
+    token varchar(64) not null,
+    last_used timestamp not null
+);
+
+SELECT * FROM persistent_logins;
+
+
+
+

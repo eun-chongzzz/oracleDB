@@ -131,13 +131,15 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '1', 4,'소설4편','test4');
+                        (paid_num.nextval, '27', 3,'소설2편','test1');
                         
 -- 조회
 SELECT * FROM paid_tbl;
 
-SELECT f.free_num,n.novel_title,n.novel_writer,n.novel_num
-	 FROM free_tbl f INNER JOIN novel_tbl n ON f.novel_num = n.novel_num;
+select * from paid_tbl p left join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = 27;
+
+SELECT p.paid_num, n.novel_title, n.novel_writer, n.novel_num, p.paid_title, n.novel_week, 
+	 FROM paid_tbl p INNER JOIN novel_tbl n ON p.novel_num = n.novel_num;
 
 -- inner join
 select n.novel_num,n.novel_writer, p.paid_price from novel_tbl n inner join paid_tbl p on n.novel_num = p.novel_num;
