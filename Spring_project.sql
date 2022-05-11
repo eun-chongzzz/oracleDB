@@ -138,6 +138,10 @@ SELECT * FROM paid_tbl;
 
 select * from paid_tbl p left join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = 27;
 
+--★
+SELECT n.novel_title , n.novel_num FROM novel_tbl n INNER JOIN paid_tbl p ON n.novel_num = p.novel_num 
+WHERE n.novel_week = 'Mon' GROUP BY n.novel_title, n.novel_num;
+
 SELECT p.paid_num, n.novel_title, n.novel_writer, n.novel_num, p.paid_title, n.novel_week, 
 	 FROM paid_tbl p INNER JOIN novel_tbl n ON p.novel_num = n.novel_num;
 
@@ -184,11 +188,12 @@ alter table free_tbl add constraint fk_free
 
 -- INSERT 예
 INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content) values
-                        (free_num.nextval, '3', 5,'은총의소설1편','은총이는 소설을 정말 못써'); 
+                        (free_num.nextval, '3', 5,'은총의소설4편','은총이는 소설을 정말 못써'); 
                         
 -- 조회
 SELECT * FROM free_tbl;
-         
+
+     
                         
 -- ★자유게시판★
 -- auto
@@ -216,6 +221,7 @@ DELETE FROM free_board_tbl WHERE free_board_num = 196610;
 
 -- 조회 
 SELECT * FROM free_board_tbl;
+
 
 -- ★댓글(분류)★
 -- auto
