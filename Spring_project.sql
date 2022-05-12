@@ -128,36 +128,10 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '22', 3,'test3-3','test3-3');
+                        (paid_num.nextval, '3', 4,'해리포터 4편','해리포터의 내용4');
                         
 -- 조회
 SELECT * FROM paid_tbl;
-
-SELECT n.novel_title , n.novel_num FROM novel_tbl n INNER JOIN paid_tbl p ON n.novel_num = p.novel_num 
-WHERE n.novel_week = 'Mon' GROUP BY n.novel_title, n.novel_num;
-
-select * from paid_tbl p left join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = 27;
-
---★
-SELECT n.novel_title , n.novel_num FROM novel_tbl n INNER JOIN paid_tbl p ON n.novel_num = p.novel_num 
-WHERE n.novel_week = 'Mon' GROUP BY n.novel_title, n.novel_num;
-
-SELECT p.paid_num, n.novel_title, n.novel_writer, n.novel_num, p.paid_title, n.novel_week, 
-	 FROM paid_tbl p INNER JOIN novel_tbl n ON p.novel_num = n.novel_num;
-
--- inner join
-select n.novel_num,n.novel_writer, p.paid_price from novel_tbl n inner join paid_tbl p on n.novel_num = p.novel_num;
-
-select * from 
-    (select /*+ INDEX_DESC(paid_tbl pk_paid) */ 
-        ROWNUM rn, paid_tbl.* from paid_tbl where ROWNUM <= 5)  WHERE rn > 0;
-
-UPDATE paid_tbl	SET
-    paid_title = '대현이의소설10', paid_content = '소설을 잘쓰네', paid_mdate = SYSDATE, paid_price = 5000 
-				WHERE paid_num = 36;    
-
-delete from paid_tbl where paid_num = 1;
-
 
 -- ★무료소설★
 -- auto
@@ -186,7 +160,7 @@ alter table free_tbl add constraint fk_free
 
 -- INSERT 예
 INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content) values
-                        (free_num.nextval, '2', 3,'test1-3','test1-3'); 
+                        (free_num.nextval, '5', 3,'자유소설1-3','자유소설1-3'); 
                         
 -- 조회
 SELECT * FROM free_tbl;
