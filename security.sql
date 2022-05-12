@@ -50,7 +50,8 @@ OUTER JOIN member_auth a on m.userid = a.userid WHERE m.userid = 'user25';
 select * from member_tbl;
 select * from member_auth;
 
-
+delete from member_tbl where userid = 'TEST';
+delete from member_auth where userid = 'TEST';
 -----------------------------------------------------
 
 -- 자동로그인

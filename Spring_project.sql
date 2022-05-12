@@ -83,7 +83,7 @@ alter sequence novel_num nocache;
 
 -- INSERT 예
 INSERT INTO novel_tbl (novel_num, novel_writer, novel_title, novel_tsnum, novel_category, novel_week) values
-                        (novel_num.nextval,'test4','test4',10, '액션', '금요일');
+                        (novel_num.nextval,'test3','test3',10, 'wuxia', 'Fri');
                         
 -- DELETE 예
 DELETE FROM novel_tbl WHERE novel_num = 24;
@@ -95,11 +95,8 @@ SELECT * FROM
 (SELECT /*+ INDEX_DESC(novel_tbl pk_novel) */
 ROWNUM rn, novel_tbl.* FROM novel_tbl WHERE ROWNUM <= 5)
 					WHERE rn > 0;
-          
+        
 
-UPDATE novel_tbl
-			SET
-		novel_title = '호랑이의 소설1', novel_tsnum = 16, novel_category = '멜로', novel_week ='금요일' WHERE novel_num = 1;
 
 select * from novel_tbl where novel_week = 'mon' order by novel_num desc;
 
@@ -131,10 +128,13 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '27', 3,'소설2편','test1');
+                        (paid_num.nextval, '22', 3,'test3-3','test3-3');
                         
 -- 조회
 SELECT * FROM paid_tbl;
+
+SELECT n.novel_title , n.novel_num FROM novel_tbl n INNER JOIN paid_tbl p ON n.novel_num = p.novel_num 
+WHERE n.novel_week = 'Mon' GROUP BY n.novel_title, n.novel_num;
 
 select * from paid_tbl p left join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = 27;
 
@@ -158,9 +158,7 @@ UPDATE paid_tbl	SET
 
 delete from paid_tbl where paid_num = 1;
 
-delete from paid_tbl.paid_title p where exists (select 1 from novel_tbl n where p.novel_num = n.novel_num);
 
-delete from (select * from paid_tbl p inner join novel_tbl n on p.novel_num = n.novel_num where p.novel_num = n.novel_num);
 -- ★무료소설★
 -- auto
 CREATE SEQUENCE free_num;
@@ -188,7 +186,7 @@ alter table free_tbl add constraint fk_free
 
 -- INSERT 예
 INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content) values
-                        (free_num.nextval, '3', 5,'은총의소설4편','은총이는 소설을 정말 못써'); 
+                        (free_num.nextval, '2', 3,'test1-3','test1-3'); 
                         
 -- 조회
 SELECT * FROM free_tbl;
@@ -229,7 +227,7 @@ CREATE SEQUENCE repl_sort_num;
 
 CREATE TABLE repl_sort_tbl(
   repl_sort_num number(10,0) PRIMARY KEY,
-  repl_sort_type varchar2(50) not null
+  repl_sort_type varchar2(50) not null 
 );
 
 -- 시퀀스 해결
