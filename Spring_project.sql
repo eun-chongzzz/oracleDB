@@ -83,7 +83,7 @@ alter sequence novel_num nocache;
 
 -- INSERT ¿¹
 INSERT INTO novel_tbl (novel_num, novel_writer, novel_title, novel_tsnum, novel_category, novel_week) values
-                        (novel_num.nextval,'test3','test3',10, 'wuxia', 'Fri');
+                        (novel_num.nextval,'¿ù','test3',10, 'wuxia', 'Fri');
                         
 -- DELETE ¿¹
 DELETE FROM novel_tbl WHERE novel_num = 24;
