@@ -67,6 +67,7 @@ CREATE SEQUENCE novel_num;
 
 CREATE TABLE novel_tbl(
     novel_num number(10,0) PRIMARY KEY,
+    user_id varchar2(20) unique,
     novel_writer varchar2(50) not null,
     novel_title varchar2(200) not null,
     novel_tsnum number(10,0) default 0,
@@ -75,6 +76,9 @@ CREATE TABLE novel_tbl(
     novel_end char(1) default '0'
 );
 
+alter table novel_tbl add constraint fk_user 
+  foreign key (user_id) references user_tbl(user_id);
+
 UPDATE novel_tbl SET 
 			novel_title = '호랑이', novel_tsnum = 10, novel_category = '액션', novel_week = '금요일', novel_end = 2 
 			WHERE novel_num = 1;
@@ -82,8 +86,8 @@ UPDATE novel_tbl SET
 alter sequence novel_num nocache; 
 
 -- INSERT 예
-INSERT INTO novel_tbl (novel_num, novel_writer, novel_title, novel_tsnum, novel_category, novel_week) values
-                        (novel_num.nextval,'월','test3',10, 'wuxia', 'Fri');
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'소설제목','유저아이디','test3',10, 'wuxia', 'Fri');
                         
 -- DELETE 예
 DELETE FROM novel_tbl WHERE novel_num = 24;
@@ -128,7 +132,7 @@ alter table paid_tbl add constraint fk_paid
 
 -- INSERT 예
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '3', 4,'해리포터 4편','해리포터의 내용4');
+                        (paid_num.nextval, '5', 4,'금요일웹툰 4편','금요일웹툰 내용4');
                         
 -- 조회
 SELECT * FROM paid_tbl;
@@ -194,56 +198,72 @@ DELETE FROM free_board_tbl WHERE free_board_num = 196610;
 -- 조회 
 SELECT * FROM free_board_tbl;
 
+-- ★ 유료 소설 댓글
 
--- ★댓글(분류)★
--- auto
-CREATE SEQUENCE repl_sort_num;
+CREATE SEQUENCE prepl_num;
 
-CREATE TABLE repl_sort_tbl(
-  repl_sort_num number(10,0) PRIMARY KEY,
-  repl_sort_type varchar2(50) not null 
+CREATE TABLE paid_repl_tbl(
+  prepl_num number(10,0) PRIMARY KEY,
+  novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
+  prepl_fnum number(10,0) not null, -- paid_tbl paid_num을 fk
+  prepl_content varchar2(1000) not null,
+  prepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
+  prepl_rdate date default sysdate,
+  prepl_mdate date
 );
 
 -- 시퀀스 해결
-alter sequence repl_sort_num nocache;
-
---INSERT 예
-INSERT INTO repl_sort_tbl (repl_sort_num, repl_sort_type) values 
-                        (repl_sort_num.nextval,'자유게시판');
-
--- 조회
-SELECT * FROM repl_sort_tbl;
-
--- ★댓글(내용)★
--- auto
-CREATE SEQUENCE repl_num;
-
-CREATE TABLE repl_tbl(
-  repl_num number(10,0) PRIMARY KEY,
-  repl_sort_type varchar2(50) not null, -- fk
-  novel_num number(10,0) not null,-- fk
-  repl_snum number(10,0) not null, -- 글번호(회차) ??
-  repl_content varchar2(1000) not null,
-  repl_writer varchar2(50) not null,
-  repl_rdate date default sysdate,
-  repl_mdate date
-);
-
--- 시퀀스 해결
-alter sequence repl_num nocache;
+alter sequence prepl_num nocache;
 
 -- 외래키 설정
-alter table repl_tbl add constraint fk_repl
-  foreign key (repl_sort_type) references repl_sort_tbl(repl_sort_type);
+
   
-alter table repl_tbl add constraint fk_repl1
+alter table paid_repl_tbl add constraint fk_pnovel_num
   foreign key (novel_num) references novel_tbl(novel_num);
 
---INSERT 예
-INSERT INTO repl_sort_tbl (repl_sort_num, repl_sort_type) values 
-                        (repl_sort_num.nextval,'자유게시판');
--- 조회
-SELECT * FROM repl_tbl;
+alter table paid_repl_tbl add constraint fk_preplyer
+  foreign key (prepl_writer) references user_tbl(user_id);  
+
+alter table paid_repl_tbl add constraint fk_repl_pnum
+  foreign key (prepl_fnum) references paid_tbl(paid_num);    
+
+-- ★ 무료 소설 댓글
+CREATE SEQUENCE frepl_num;
+
+CREATE TABLE free_repl_tbl(
+  frepl_num number(10,0) PRIMARY KEY,
+  novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
+  frepl_fnum number(10,0) not null, -- free_tbl free_num을 fk
+  frepl_content varchar2(1000) not null,
+  frepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
+  frepl_rdate date default sysdate,
+  frepl_mdate date
+);
+
+-- 시퀀스 해결
+alter sequence frepl_num nocache;
+
+-- 외래키 설정
+
+  
+alter table free_repl_tbl add constraint fk_novel_num
+  foreign key (novel_num) references novel_tbl(novel_num);
+
+alter table free_repl_tbl add constraint fk_replyer
+  foreign key (frepl_writer) references user_tbl(user_id);  
+
+alter table free_repl_tbl add constraint fk_repl_fnum
+  foreign key (frepl_fnum) references free_tbl(free_num);
+
+
+
+
+
+
+
+
+
+
   
   
 -- ★토너먼트(대회)★
@@ -454,7 +474,8 @@ DROP SEQUENCE paid_snum;
 DROP SEQUENCE free_num;
 DROP SEQUENCE free_snum;
 DROP SEQUENCE free_board_num;
-DROP SEQUENCE repl_sort_num;
+DROP SEQUENCE prepl_num;
+DROP SEQUENCE frepl_num;
 DROP SEQUENCE repl_num;
 DROP SEQUENCE to_num;
 DROP SEQUENCE towork_num;
