@@ -35,9 +35,10 @@ SELECT * FROM user_tbl;
 
 -- INSERT 예
 INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) values 
-                  (user_num.nextval,'test3','1234','김대현','01012345678','test@naver.com');
+                  (user_num.nextval,'user','user','TEST','01012345678','test@test.com');
 
-
+select * from paid_tbl;
+commit;
 -- ★회원등급★   
 -- auto
 CREATE SEQUENCE auth_num;
@@ -67,7 +68,7 @@ CREATE SEQUENCE novel_num;
 
 CREATE TABLE novel_tbl(
     novel_num number(10,0) PRIMARY KEY,
-    user_id varchar2(20) unique,
+    user_id varchar2(20),
     novel_writer varchar2(50) not null,
     novel_title varchar2(200) not null,
     novel_tsnum number(10,0) default 0,
@@ -76,7 +77,7 @@ CREATE TABLE novel_tbl(
     novel_end char(1) default '0'
 );
 
-alter table novel_tbl add constraint fk_user 
+alter table novel_tbl add constraint fk_novel 
   foreign key (user_id) references user_tbl(user_id);
 
 UPDATE novel_tbl SET 
@@ -94,6 +95,7 @@ DELETE FROM novel_tbl WHERE novel_num = 24;
 
 -- 조회
 SELECT * FROM novel_tbl order by novel_num desc;
+
 SELECT * FROM novel_tbl WHERE novel_end = 0;
 SELECT * FROM
 (SELECT /*+ INDEX_DESC(novel_tbl pk_novel) */
@@ -114,7 +116,8 @@ CREATE TABLE paid_tbl(
     novel_num number(10,0) not null, -- fk
     paid_snum number(10,0) not null,
     paid_title varchar2(200) not null,
-    paid_content CLOB not null,
+    paid_content1 CLOB not null,
+    paid_content2 CLOB not null,
     paid_rdate date default sysdate,
     paid_mdate date ,
     paid_hit number(10,0) default 0,
