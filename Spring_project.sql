@@ -16,7 +16,7 @@ CREATE SEQUENCE user_num;
 CREATE TABLE user_tbl(
   user_num number(10,0) PRIMARY key,
   user_id varchar2(20) unique,
-  user_pw varchar2(20) not null,
+  user_pw varchar2(200) not null,
   user_name varchar2(10) not null,
   user_pnum varchar2(15) not null,
   user_email varchar2(30) not null,
@@ -30,6 +30,9 @@ CREATE TABLE user_tbl(
 -- 시퀀스 해결
 alter sequence user_num nocache; 
 
+alter table user_tbl modify user_pw varchar2(100);
+alter table user_tbl modify user_name varchar2(30);
+commit;
 -- 조회
 SELECT * FROM user_tbl;
 
@@ -37,8 +40,7 @@ SELECT * FROM user_tbl;
 INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) values 
                   (user_num.nextval,'user','user','TEST','01012345678','test@test.com');
 
-select * from paid_tbl;
-commit;
+
 -- ★회원등급★   
 -- auto
 CREATE SEQUENCE auth_num;
@@ -57,7 +59,7 @@ alter table auth_tbl add constraint fk_auth foreign key (user_id) references use
 
 -- INSERT 예
 INSERT INTO auth_tbl (auth_num,user_id,auth) values 
-                       (auth_num.nextval,'test3','운영자');         
+                       (auth_num.nextval,'user','ROLE_ADMIN');         
 -- 조회
 select*from auth_tbl;                                
                            
@@ -80,18 +82,8 @@ CREATE TABLE novel_tbl(
 alter table novel_tbl add constraint fk_novel 
   foreign key (user_id) references user_tbl(user_id);
 
-UPDATE novel_tbl SET 
-			novel_title = '호랑이', novel_tsnum = 10, novel_category = '액션', novel_week = '금요일', novel_end = 2 
-			WHERE novel_num = 1;
 -- 시퀀스 해결
 alter sequence novel_num nocache; 
-
--- INSERT 예
-INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
-                        (novel_num.nextval,'소설제목','유저아이디','test3',10, 'wuxia', 'Fri');
-                        
--- DELETE 예
-DELETE FROM novel_tbl WHERE novel_num = 24;
 
 -- 조회
 SELECT * FROM novel_tbl order by novel_num desc;
@@ -117,7 +109,7 @@ CREATE TABLE paid_tbl(
     paid_snum number(10,0) not null,
     paid_title varchar2(200) not null,
     paid_content1 CLOB not null,
-    paid_content2 CLOB not null,
+    paid_content2 CLOB,
     paid_rdate date default sysdate,
     paid_mdate date ,
     paid_hit number(10,0) default 0,
@@ -133,10 +125,6 @@ alter sequence paid_snum nocache;
 alter table paid_tbl add constraint fk_paid 
   foreign key (novel_num) references novel_tbl(novel_num);
 
--- INSERT 예
-INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '5', 4,'금요일웹툰 4편','금요일웹툰 내용4');
-                        
 -- 조회
 SELECT * FROM paid_tbl;
 
