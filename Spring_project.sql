@@ -38,6 +38,7 @@ INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) v
                   (user_num.nextval,'user','user','TEST','01012345678','test@test.com');
 
 select * from paid_tbl;
+
 commit;
 -- ★회원등급★   
 -- auto
@@ -117,7 +118,7 @@ CREATE TABLE paid_tbl(
     paid_snum number(10,0) not null,
     paid_title varchar2(200) not null,
     paid_content1 CLOB not null,
-    paid_content2 CLOB not null,
+    paid_content2 CLOB ,
     paid_rdate date default sysdate,
     paid_mdate date ,
     paid_hit number(10,0) default 0,
