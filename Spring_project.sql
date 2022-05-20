@@ -196,7 +196,7 @@ CREATE SEQUENCE prepl_num;
 CREATE TABLE paid_repl_tbl(
   prepl_num number(10,0) PRIMARY KEY,
   novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
-  prepl_fnum number(10,0) not null, -- paid_tbl paid_num을 fk
+  prepl_pnum number(10,0) not null, -- paid_tbl paid_num을 fk
   prepl_content varchar2(1000) not null,
   prepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
   prepl_rdate date default sysdate,

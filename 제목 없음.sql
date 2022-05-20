@@ -47,21 +47,24 @@ INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2)
 (select paid_num.nextval, novel_num, paid_snum, paid_title, paid_content1,paid_content2 from paid_tbl);                       
 
-                  
+select * from paid_tbl;
+select * from novel_tbl;
+
+-- 페이징 처리 구문                  
 select * from (SELECT * FROM
 ( SELECT /*+ INDEX_DESC(paid_tbl pk_paid) */
   ROWNUM rn, paid_tbl.* FROM paid_tbl WHERE rownum <= 20)
-    WHERE rn > 10) where novel_num = 5;
+    WHERE rn > 10) where novel_num = 4;
     
 select count(*) from paid_tbl where novel_num = 5;
                         
                         commit;
                         
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
-                        (paid_num.nextval, '1', 3, '월요일 웹툰 1편', '월요일 웹툰 1편 내용', '월요일 웹툰 1편 내용');
+                        (paid_num.nextval, '4', 3, '베이비폭군 3편', '베이비폭군편 내용', '베이비폭군편 내용');
                         
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
-                        (paid_num.nextval, '3', 3, '두번째 화요일 웹툰 3편', '두번째 화요일 웹툰 3편 내용', '화요일 웹툰 1편 내용');
+                        (paid_num.nextval, '5', 1, '두번째 화요일 웹툰 3편', '두번째 화요일 웹툰 3편 내용', '화요일 웹툰 1편 내용');
                         
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
                         (paid_num.nextval, '3', 3, '수요일 웹툰 1편', '수요일 웹툰 1편 내용', '수요일 웹툰 1편 내용');
