@@ -30,16 +30,13 @@ CREATE TABLE user_tbl(
 -- 시퀀스 해결
 alter sequence user_num nocache; 
 
-
 -- 조회
 SELECT * FROM user_tbl;
 
 -- INSERT 예
 INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) values 
-                  (user_num.nextval,'user','user','TEST','01012345678','test@test.com');
+                  (user_num.nextval,'test3','1234','김대현','01012345678','test@naver.com');
 
-
-commit;
 
 -- ★회원등급★   
 -- auto
@@ -59,10 +56,12 @@ alter table auth_tbl add constraint fk_auth foreign key (user_id) references use
 
 -- INSERT 예
 INSERT INTO auth_tbl (auth_num,user_id,auth) values 
-                       (auth_num.nextval,'user','ROLE_ADMIN');         
+                       (auth_num.nextval,'test3','운영자');         
 -- 조회
 select*from auth_tbl;                                
-                           
+  
+  SELECT * FROM paid_tbl p INNER JOIN novel_tbl n ON n.novel_num = p.novel_num 
+			WHERE n.novel_num = 4;
 
 -- ★소설(공통)★
 -- auto
@@ -70,7 +69,7 @@ CREATE SEQUENCE novel_num;
 
 CREATE TABLE novel_tbl(
     novel_num number(10,0) PRIMARY KEY,
-    user_id varchar2(20),
+    user_id varchar2(20) not null,  -- user_tbl에서 user_id를 fk
     novel_writer varchar2(50) not null,
     novel_title varchar2(200) not null,
     novel_tsnum number(10,0) default 0,
@@ -79,24 +78,127 @@ CREATE TABLE novel_tbl(
     novel_end char(1) default '0'
 );
 
-alter table novel_tbl add constraint fk_novel 
-  foreign key (user_id) references user_tbl(user_id);
-
 -- 시퀀스 해결
 alter sequence novel_num nocache; 
 
+-- INSERT 예
+-- ★ 유료 소설 데이터 적재 
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '놀마', 'paidWriter0', '미친 중독', 10, 'romance', 'Mon');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '백묘', 'paidWriter1', '꽃이 삼킨 짐승', 10, 'romance', 'Mon');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '죽음을 희망합니다', 'paidWriter2', '죽음을 희망합니다', 10, 'romance', 'Mon');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'이흰','paidWriter0','베이비폭군', 5, 'romance', 'Tue'); 
+
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'박수정','paidWriter1','어린상사', 5, 'romance', 'Tue');                     
+
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'코양희','paidWriter2','후궁으로 깨어나다', 5, 'romance', 'Tue');                     
+                    
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'플아다','paidWriter0','날 닮은 아이',10, 'romance', 'Wed');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'알파타르트','paidWriter1','하렘의 남자들',10, 'romance', 'Wed');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'빠양이','paidWriter2','강제맞선',10, 'romance', 'Wed');
+
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'오윤화','paidWriter0','남편과 이혼하겠습니다',10, 'fantasy', 'Thu');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'달콤한홍차', 'paidWriter1', '신랑이 바뀐 나의 영혼',10, 'fantasy', 'Thu');
+
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'로즈빈','paidWriter2','사랑같은건 처음',10, 'fantasy', 'Thu');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'백묘','paidWriter0','꽃이 삼킨 짐승',10, 'fantasy', 'Fri');
+
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'문백경','paidWriter1','역대급 영지 설계사',10, 'fantasy', 'Fri');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval,'꽃제이','paidWriter2','더캐슬',10, 'fantasy', 'Fri');
+                        
+-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+-- ★ 무료 소설 데이터 적재 
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '싱숑', 'freeWriter0', '전지적 독자 시점', 10, 'fantasy', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '김언희', 'freeWriter0', '이섭의연애', 10, 'romance', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '한중월야', 'freeWriter0', '나노마신', 10, 'wuxia', 'free');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'히가시노 게이고','freeWriter0','나미야 잡화점의 기적', 5, 'mystery', 'free'); 
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '추공', 'freeWriter1', '나 혼자만 레벨업', 10, 'fantasy', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '비가', 'freeWriter1', '화산귀환', 10, 'romance', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '우각', 'freeWriter1', '십전제', 10, 'wuxia', 'free');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'아오야마 고쇼','freeWriter1','명탐정 코난', 5, 'mystery', 'free'); 
+                    
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '김정률', 'freeWriter2', '다크메이지', 10, 'fantasy', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '문지효', 'freeWriter2', '남편이 돌아왔다', 10, 'romance', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '태규', 'freeWriter2', '천라신조', 10, 'wuxia', 'free');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'사토 후미야','freeWriter2','소년탐정 김전일', 5, 'mystery', 'free'); 
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '료우진', 'freeWriter3', '메모라이즈', 10, 'fantasy', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '박영', 'freeWriter3', '겨울문방구', 10, 'romance', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '김강현', 'freeWriter3', '마신전생기', 10, 'wuxia', 'free');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'아서 코난 도일','freeWriter3','셜록홈즈', 5, 'mystery', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '이그니시스', 'freeWriter4', '리셋라이프', 10, 'fantasy', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '서혜은', 'freeWriter4', '우리가 헤어지는 이유', 10, 'romance', 'free');
+
+INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                        (novel_num.nextval, '강영호', 'freeWriter4', '절대강호', 10, 'wuxia', 'free');
+                        
+INSERT INTO novel_tbl (novel_num, novel_writer,user_id, novel_title, novel_tsnum, novel_category, novel_week) values
+                    (novel_num.nextval,'엘러리퀸','freeWriter4','Y의비극', 5, 'mystery', 'free'); 
+                    
+
+                        
+-- DELETE 예
+DELETE FROM novel_tbl WHERE novel_num = 1;
+
 -- 조회
-SELECT * FROM novel_tbl order by novel_num desc;
+SELECT * FROM novel_tbl;
 
-SELECT * FROM novel_tbl WHERE novel_end = 0;
-SELECT * FROM
-(SELECT /*+ INDEX_DESC(novel_tbl pk_novel) */
-ROWNUM rn, novel_tbl.* FROM novel_tbl WHERE ROWNUM <= 5)
-					WHERE rn > 0;
-        
-
-
-select * from novel_tbl where novel_week = 'mon' order by novel_num desc;
 
 -- ★유료소설★
 -- auto
@@ -109,7 +211,7 @@ CREATE TABLE paid_tbl(
     paid_snum number(10,0) not null,
     paid_title varchar2(200) not null,
     paid_content1 CLOB not null,
-    paid_content2 CLOB ,
+    paid_content2 CLOB,
     paid_rdate date default sysdate,
     paid_mdate date ,
     paid_hit number(10,0) default 0,
@@ -125,8 +227,51 @@ alter sequence paid_snum nocache;
 alter table paid_tbl add constraint fk_paid 
   foreign key (novel_num) references novel_tbl(novel_num);
 
+-- INSERT 예
+INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
+                        (paid_num.nextval, '2', 10,'대현의소설1편','대현이는 소설을 정말 못써');
+                        
 -- 조회
 SELECT * FROM paid_tbl;
+
+-- ★ 유료 소설 댓글
+
+CREATE SEQUENCE prepl_num;
+drop sequence prepl_num;
+
+CREATE TABLE paid_repl_tbl(
+  prepl_num number(10,0) PRIMARY KEY,
+  novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
+  paid_pnum number(10,0) not null, -- paid_tbl paid_num을 fk
+  prepl_content varchar2(1000) not null,
+  prepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
+  prepl_rdate date default sysdate,
+  prepl_mdate date
+);
+insert into paid_repl_tbl (prepl_num, novel_num, paid_pnum, prepl_content, prepl_writer )
+  values (prepl_num.nextval, 8, 15,'댓글내용입니다4', 'user0');
+
+
+select * from paid_repl_tbl;
+
+commit;
+
+
+-- 시퀀스 해결
+alter sequence prepl_num nocache;
+
+-- 외래키 설정
+alter table paid_repl_tbl add constraint fk_pnovel_num
+  foreign key (novel_num) references novel_tbl(novel_num);
+
+alter table paid_repl_tbl add constraint fk_preplyer
+  foreign key (prepl_writer) references user_tbl(user_id);  
+
+alter table paid_repl_tbl add constraint fk_repl_pnum
+  foreign key (paid_pnum) references paid_tbl(paid_num);  
+
+select * from paid_repl_tbl;
+
 
 -- ★무료소설★
 -- auto
@@ -138,7 +283,8 @@ CREATE TABLE free_tbl(
     novel_num number(10,0) not null, -- fk
     free_snum number(10,0) not null,
     free_title varchar2(200) not null,
-    free_content CLOB not null,
+    free_content1 CLOB not null,
+    free_content2 CLOB,
     free_rdate date default sysdate,
     free_mdate date ,
     free_hit number(10,0) default 0,
@@ -155,68 +301,117 @@ alter table free_tbl add constraint fk_free
 
 -- INSERT 예
 INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content) values
-                        (free_num.nextval, '5', 3,'자유소설1-3','자유소설1-3'); 
+                        (free_num.nextval, '3', 5,'은총의소설1편','은총이는 소설을 정말 못써'); 
                         
 -- 조회
 SELECT * FROM free_tbl;
 
-     
-                        
--- ★자유게시판★
+-- 05.18 작가 신청 게시판 & 딸린 첨부파일 게시판
+
+
 -- auto
-CREATE SEQUENCE free_board_num;
+CREATE SEQUENCE enroll_num;
 
-CREATE TABLE free_board_tbl(
-  free_board_num number(10,0) PRIMARY KEY,
-  free_board_title varchar2(50) not null,
-  free_board_content varchar2(2000) not null,
-  free_board_writer varchar2(50) not null,
-  free_board_rdate date default sysdate,
-  free_board_mdate date,
-  free_board_hit number(10,0) default 0
+-- 테이블 생성
+CREATE TABLE enroll_tbl(
+
+    enroll_num number(10,0) PRIMARY KEY,
+    novel_writer varchar2(50) not null,
+    novel_title varchar2(200) not null,
+    novel_category varchar2(10) not null,
+    user_id varchar2(20) not null, 
+    enroll_intro varchar2(2000) not null,
+    enroll_result number(10,0) default 0,
+    enroll_msg varchar2(1000)
 );
 
 -- 시퀀스 해결
-alter sequence free_board_num nocache;
+alter sequence enroll_num nocache;
 
--- INSERT 예
-INSERT INTO free_board_tbl (free_board_num, free_board_title, free_board_content, free_board_writer) values 
-                  (free_board_num.nextval,'대현이의글','대현이가쓴글', '대현');
-                  
--- DELETE 예
-DELETE FROM free_board_tbl WHERE free_board_num = 196610;
+-- 외래키
+alter table enroll_tbl add constraint fk_enroll foreign key (user_id) references user_tbl(user_id);
 
--- 조회 
-SELECT * FROM free_board_tbl;
+-- 조회
+SELECT * FROM enroll_tbl;
 
--- ★ 유료 소설 댓글
+SELECT * FROM enroll_tbl WHERE enroll_num=1;
 
-CREATE SEQUENCE prepl_num;
+-- 커밋
+commit;
 
-CREATE TABLE paid_repl_tbl(
-  prepl_num number(10,0) PRIMARY KEY,
-  novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
-  prepl_pnum number(10,0) not null, -- paid_tbl paid_num을 fk
-  prepl_content varchar2(1000) not null,
-  prepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
-  prepl_rdate date default sysdate,
-  prepl_mdate date
+-- 적재
+INSERT INTO enroll_tbl(enroll_num, novel_writer, novel_title, novel_category, user_id, enroll_intro, enroll_msg) VALUES
+    (enroll_num.nextval, '작가1', '제목1', 'romance', 'user2', '작품소개입니다1', '관리자 메세지1');
+    
+INSERT INTO enroll_tbl(enroll_num, novel_writer, novel_title, novel_category, user_id, enroll_intro, enroll_msg) VALUES
+    (enroll_num.nextval, '작가2', '제목2', 'romance', 'user3', '작품소개입니다2', '관리자 메세지2');
+    
+INSERT INTO enroll_tbl(enroll_num, novel_writer, novel_title, novel_category, user_id, enroll_intro, enroll_msg) VALUES
+    (enroll_num.nextval, '작가3', '제목3', 'romance', 'user4', '작품소개입니다3', '관리자 메세지3');
+    
+    
+    SELECT * FROM user_tbl;
+    
+    
+-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ▼ ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+
+-- 첨부파일 테이블
+
+
+
+-- 테이블 생성
+CREATE TABLE enroll_img_tbl(
+
+    uuid VARCHAR(100) NOT NULL,          -- uuid
+    uploadPath VARCHAR(200) NOT NULL,    -- 파일 경로
+    fileName VARCHAR(100) NOT NULL,      -- 파일 이름
+    fileType char(1) DEFAULT 'I',        -- 이미지인지 아닌지의 여부
+    enroll_num number(10)                -- enroll_tbl의 몇 번째 글에 딸려있는지
+    
 );
 
--- 시퀀스 해결
-alter sequence prepl_num nocache;
+ALTER TABLE enroll_img_tbl ADD CONSTRAINT pk_enroll_ing_attach PRIMARY KEY (uuid);
+ALTER TABLE enroll_img_tbl ADD CONSTRAINT fk_enroll_attach FOREIGN KEY(enroll_num) REFERENCES enroll_tbl(enroll_num);
 
--- 외래키 설정
+-- ■ 유료 소설 이미지 첨부파일
+SELECT * FROM paid_img_tbl;
+CREATE TABLE paid_img_tbl(
 
-  
-alter table paid_repl_tbl add constraint fk_pnovel_num
-  foreign key (novel_num) references novel_tbl(novel_num);
+    uuid VARCHAR(100) NOT NULL,          -- uuid
+    uploadPath VARCHAR(200) NOT NULL,    -- 파일 경로
+    fileName VARCHAR(100) NOT NULL,      -- 파일 이름
+    fileType char(1) DEFAULT 'I',        -- 이미지인지 아닌지의 여부
+    paid_num number(10)                -- paid_tbl의 몇 번째 글에 딸려있는지
+    
+);
 
-alter table paid_repl_tbl add constraint fk_preplyer
-  foreign key (prepl_writer) references user_tbl(user_id);  
+ALTER TABLE paid_img_tbl ADD CONSTRAINT pk_paid_ing_attach PRIMARY KEY (uuid);
+ALTER TABLE paid_img_tbl ADD CONSTRAINT fk_paid_attach FOREIGN KEY(paid_num) REFERENCES paid_tbl(paid_num);
 
-alter table paid_repl_tbl add constraint fk_repl_pnum
-  foreign key (prepl_fnum) references paid_tbl(paid_num);    
+
+SELECT * FROM paid_img_tbl;
+
+-- ■ 무료 소설 이미지 첨부파일
+SELECT * FROM free_img_tbl;
+CREATE TABLE free_img_tbl(
+
+    uuid VARCHAR(100) NOT NULL,          -- uuid
+    uploadPath VARCHAR(200) NOT NULL,    -- 파일 경로
+    fileName VARCHAR(100) NOT NULL,      -- 파일 이름
+    fileType char(1) DEFAULT 'I',        -- 이미지인지 아닌지의 여부
+    free_num number(10)                -- free_tbl의 몇 번째 글에 딸려있는지
+    
+);
+
+ALTER TABLE free_img_tbl ADD CONSTRAINT pk_free_ing_attach PRIMARY KEY (uuid);
+ALTER TABLE free_img_tbl ADD CONSTRAINT fk_free_attach FOREIGN KEY(free_num) REFERENCES free_tbl(free_num);
+
+
+SELECT * FROM free_img_tbl;
+
+commit;         
+         
 
 -- ★ 무료 소설 댓글
 CREATE SEQUENCE frepl_num;
@@ -224,9 +419,9 @@ CREATE SEQUENCE frepl_num;
 CREATE TABLE free_repl_tbl(
   frepl_num number(10,0) PRIMARY KEY,
   novel_num number(10,0) not null,-- novel_tbl novel_num을 fk
-  frepl_fnum number(10,0) not null, -- free_tbl free_num을 fk
+  free_num number(10,0) not null, -- free_tbl free_num을 fk
   frepl_content varchar2(1000) not null,
-  frepl_writer varchar2(50) not null,  -- user_tbl user_id를 fk
+  user_id varchar2(50) not null,  -- user_tbl user_id를 fk
   frepl_rdate date default sysdate,
   frepl_mdate date
 );
@@ -241,13 +436,11 @@ alter table free_repl_tbl add constraint fk_novel_num
   foreign key (novel_num) references novel_tbl(novel_num);
 
 alter table free_repl_tbl add constraint fk_replyer
-  foreign key (frepl_writer) references user_tbl(user_id);  
+  foreign key (user_id) references user_tbl(user_id);  
 
 alter table free_repl_tbl add constraint fk_repl_fnum
-  foreign key (frepl_fnum) references free_tbl(free_num);
-
-
-
+  foreign key (free_num) references free_tbl(free_num);
+  
   
 -- ★토너먼트(대회)★
 -- auto
@@ -297,6 +490,84 @@ INSERT INTO towork_tbl (towork_num, to_num, novel_num) values
                 
 -- 조회
 SELECT * FROM towork_tbl;
+
+-- ★토너먼트(대회/작품 유저 추천 기록)★
+
+    -- 번호, 유저 아이디(유저 번호가 pk이긴 한데 아이디도 유니크니까), 토너먼트 번호, 작품 번호, 추천 날짜 
+    
+    -- auto
+    CREATE SEQUENCE torec_num;
+    
+    CREATE TABLE torec_tbl(
+        torec_num number PRIMARY KEY,       -- 번호
+        user_id varchar2(20),               -- 유저 아이디        fk(user_tbl)
+        to_num number(10,0),                -- 토너먼트 번호      fk(tourna_tbl)
+        towork_num number,                  -- 토너먼트 작품 번호 fk(towork_tbl)
+        novel_num(10,0) not null,           -- 소설번호 
+        rec_date date default sysdate       -- 추천일
+    );
+
+    -- 시퀀스 해결
+    alter sequence torec_num nocache;
+    
+    -- 외래키 설정
+    alter table torec_tbl add constraint fk_torec1
+        foreign key (user_id) references user_tbl(user_id);
+        
+    alter table torec_tbl add constraint fk_torec2
+        foreign key (to_num) references tourna_tbl(to_num);
+        
+    alter table torec_tbl add constraint fk_torec3
+        foreign key (towork_num) references towork_tbl(towork_num);
+        
+    alter table torec_tbl add constraint fk_torec4
+        foreign key (novel_num) references novel_tbl(novel_num);
+    
+    drop table torec_tbl;
+    
+    -- 테이블 조회
+    SELECT * FROM torec_tbl ORDER BY torec_num DESC;
+    
+    -- 데이터 삭제
+    DELETE FROM torec_tbl WHERE user_id = 'id012';
+    DELETE FROM torec_tbl WHERE to_num =1;
+    
+    commit;
+    
+    -- 추천 기록 깔끔하게 보기
+         -- 1. 출전작품-추천기록을 inner join 함
+         SELECT tt.*, twt.novel_num, twt.towork_rec FROM torec_tbl tt INNER JOIN towork_tbl twt ON tt.towork_num = twt.towork_num;
+         -- 2. 1의 결과를 노블 테이블과 inner join 함
+             -- 토너먼트번호  -추천번호   - 대회참여번호 -추천아이디  - 소설번호   - 소설 제목      - 추천일
+         SELECT jt.to_num, jt.torec_num, jt.towork_num, jt.user_id, jt.novel_num, nt.novel_title, jt.towork_rec as 추천수, jt.rec_date 
+            FROM 
+        (SELECT tt.*, twt.novel_num, twt.towork_rec FROM torec_tbl tt INNER JOIN towork_tbl twt ON tt.towork_num = twt.towork_num) jt
+            INNER JOIN 
+        novel_tbl nt 
+            ON
+        nt.novel_num = jt.novel_num
+            ORDER BY
+        jt.torec_num DESC;
+    
+    -- 적재 시도                           -토너먼트 번호 -토너먼트작품번호
+    INSERT INTO torec_tbl (torec_num, user_id, to_num, towork_num) 
+        VALUES (torec_num.nextval, 'id001', 1, 252);
+        
+    INSERT INTO torec_tbl (torec_num, user_id, to_num, towork_num) 
+        VALUES (torec_num.nextval, 'id002', 1, 257);
+    
+     commit;
+     
+     
+     -- 로그인한 유저가 해당 토너먼트의 추천 기록이 있는지 확인
+        -- 리턴된 to_num에 1이 있다면 8강 버튼 비활성화
+        -- 리턴된 to_num에 2이 있다면 4강 버튼 비활성화
+        -- 리턴된 to_num에 3이 있다면 2강 버튼 비활성화
+     SELECT towork_num, user_id FROM torec_tbl WHERE user_id = 'id001' AND to_num=1;
+     
+    SELECT towork_num, user_id FROM torec_tbl WHERE user_id = 'id001' AND to_num= 1;
+    
+    SELECT towork_num, user_id FROM torec_tbl WHERE to_num=1 AND user_id = 'id002';
   
     
 -- ★선호작★
@@ -305,8 +576,8 @@ CREATE SEQUENCE fav_num;
 
 CREATE TABLE favorite_tbl(
   fav_num number(10,0) PRIMARY KEY,
-  novel_num number(10,0), -- fk
-  user_num number(10,0) -- fk
+  novel_num number(10,0), -- novel_tbl에서 novel_num fk
+  user_num number(10,0) -- user_tbl에서 user_num fk
 );
 
 -- 시퀀스 해결
@@ -326,33 +597,66 @@ INSERT INTO favorite_tbl (fav_num, novel_num, user_num) values
 SELECT * FROM favorite_tbl;
 
 
--- ★책갈피★
+-- ★유료 책갈피★
 -- auto
-CREATE SEQUENCE bm_num;
+CREATE SEQUENCE pbm_num;
 
-CREATE TABLE bookmark_tbl(
-  bm_num number(10,0) PRIMARY KEY,
-  novel_num number(10,0), -- fk
-  bm_novel_num number(10,0),
+CREATE TABLE paid_bookmark_tbl(
+  pbm_num number(10,0) PRIMARY KEY,
+  novel_num number(10,0), -- novel_tbl에서 novel_num fk
+  pbm_paid_num number(10,0), -- paid_tbl에서 paid_num fk
   user_num number(10,0) -- fk
 );
 
 -- 시퀀스 해결
-alter sequence bm_num nocache;
+alter sequence pbm_num nocache;
 
 -- 외래키 설정
 alter table bookmark_tbl add constraint fk_bookmark
   foreign key (novel_num) references novel_tbl(novel_num);
+alter table bookmark_tbl add constraint fk_bookmark_free_num
+  foreign key (pbm_paid_num) references paid_tbl(paid_num);
   
 alter table bookmark_tbl add constraint fk_bookmark1
   foreign key (user_num) references user_tbl(user_num);
   
 -- INSERT 예
-INSERT INTO bookmark_tbl (bm_num, novel_num, bm_novel_num, user_num) values
-            (bm_num.nextval, 2, 3, 1);
+INSERT INTO bookmark_tbl (pbm_num, novel_num, pbm_paid_num, user_num) values
+            (pbm_num.nextval, 2, 3, 1);
             
 -- 조회
-SELECT * FROM bookmark_tbl;
+SELECT * FROM paid_bookmark_tbl;
+
+-- ★무료 책갈피★
+-- auto
+CREATE SEQUENCE fbm_num;
+
+CREATE TABLE free_bookmark_tbl(
+  fbm_num number(10,0) PRIMARY KEY,
+  novel_num number(10,0), -- novel_tbl에서 novel_num fk
+  fbm_free_num number(10,0), -- free_tbl에서 free_num fk
+  user_num number(10,0) -- fk
+);
+
+-- 시퀀스 해결
+alter sequence pbm_num nocache;
+
+-- 외래키 설정
+alter table bookmark_tbl add constraint fk_bookmark
+  foreign key (novel_num) references novel_tbl(novel_num);
+  
+ alter table bookmark_tbl add constraint fk_bookmark_free_num
+  foreign key (fbm_free_num) references free_tbl(free_num);
+  
+alter table bookmark_tbl add constraint fk_bookmark1
+  foreign key (user_num) references user_tbl(user_num);
+  
+-- INSERT 예
+INSERT INTO bookmark_tbl (fbm_num, novel_num, fbm_free_num, user_num) values
+            (fbm_num.nextval, 2, 3, 1);
+            
+-- 조회
+SELECT * FROM free_bookmark_tbl;
 
 
 -- ★결제(현금->코인)★
@@ -430,19 +734,24 @@ SELECT * FROM use_tbl;
 
 -------------------------------------------------
 
--- ※테이블 날리기(역순으로 실행)※ 15
+-- ※테이블 날리기(역순으로 실행)※ 
 DROP TABLE user_tbl;
 DROP TABLE auth_tbl;
 DROP TABLE novel_tbl;
 DROP TABLE paid_tbl;
 DROP TABLE free_tbl;
-DROP TABLE free_board_tbl;
-DROP TABLE repl_sort_tbl;
-DROP TABLE repl_tbl;
+DROP TABLE enroll_tbl;
+DROP TABLE enroll_img_tbl;
+DROP TABLE paid_img_tbl;
+DROP TABLE free_img_tbl;
+DROP TABLE prepl_repl_tbl;
+DROP TABLE free_repl_tbl;
 DROP TABLE tourna_tbl;
 DROP TABLE towork_tbl;
+DROP TABLE torec_tbl;
 DROP TABLE favorite_tbl;
-DROP TABLE bookmark_tbl;
+DROP TABLE pbm_tbl;
+DROP TABLE fbm_tbl;
 DROP TABLE charge_tbl;
 DROP TABLE coupon_tbl;
 DROP TABLE use_tbl;
@@ -457,8 +766,7 @@ DROP SEQUENCE paid_snum;
 DROP SEQUENCE free_num;
 DROP SEQUENCE free_snum;
 DROP SEQUENCE free_board_num;
-DROP SEQUENCE prepl_num;
-DROP SEQUENCE frepl_num;
+DROP SEQUENCE repl_sort_num;
 DROP SEQUENCE repl_num;
 DROP SEQUENCE to_num;
 DROP SEQUENCE towork_num;
