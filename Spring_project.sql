@@ -269,7 +269,7 @@ alter table paid_repl_tbl add constraint fk_preplyer
 
 alter table paid_repl_tbl add constraint fk_repl_pnum
   foreign key (paid_pnum) references paid_tbl(paid_num);  
-
+commit;
 select * from paid_repl_tbl;
 
 

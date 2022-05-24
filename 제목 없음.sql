@@ -92,7 +92,7 @@ INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,
                         (paid_num.nextval, '6', 1, 'ÈÄ±ÃÀ¸·Î ±ú¾î³ª´Ù 1È­', 'ÈÄ±ÃÈÄ±ÃÈÄ±ÃÈÄ±Ã', 'ÈÄ±ÃÈÄ±ÃÈÄ±ÃÈÄ±Ã');
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
                         (paid_num.nextval, '6', 2, 'ÈÄ±ÃÀ¸·Î ±ú¾î³ª´Ù 2È­', 'ÈÄ±Ã2ÈÄ±Ã2ÈÄ±Ã2ÈÄ±Ã2', 'ÈÄ±Ã2ÈÄ±Ã2ÈÄ±Ã2ÈÄ±Ã2');
-
+commit;
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
                         (paid_num.nextval, '7', 1, '³¯ ´àÀº ¾ÆÀÌ 1È­', '¾ÆÀÌ¾ÆÀÌ¾ÆÀÌ¾ÆÀÌ', '¾ÆÀÌ¾ÆÀÌ¾ÆÀÌ¾ÆÀÌ');
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
