@@ -32,6 +32,8 @@ alter sequence user_num nocache;
 
 -- Á¶È¸
 SELECT * FROM user_tbl;
+update user_tbl set user_coin = 0, user_coupon =  0 where user_num = 1;
+update user_tbl set user_coin = (user_coin + 100), user_coupon = (user_coupon + 0) where user_num = 1;
 
 -- INSERT ¿¹
 INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) values 
