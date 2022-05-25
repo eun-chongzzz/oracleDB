@@ -237,7 +237,7 @@ SELECT * FROM paid_tbl;
 -- ★ 유료 소설 댓글
 
 CREATE SEQUENCE prepl_num;
-drop sequence prepl_num;
+
 
 CREATE TABLE paid_repl_tbl(
   prepl_num number(10,0) PRIMARY KEY,
@@ -248,13 +248,9 @@ CREATE TABLE paid_repl_tbl(
   prepl_rdate date default sysdate,
   prepl_mdate date
 );
-insert into paid_repl_tbl (prepl_num, novel_num, paid_pnum, prepl_content, prepl_writer )
-  values (prepl_num.nextval, 8, 15,'댓글내용입니다4', 'user0');
 
 
 select * from paid_repl_tbl;
-
-commit;
 
 
 -- 시퀀스 해결
@@ -269,7 +265,7 @@ alter table paid_repl_tbl add constraint fk_preplyer
 
 alter table paid_repl_tbl add constraint fk_repl_pnum
   foreign key (paid_pnum) references paid_tbl(paid_num);  
-commit;
+
 select * from paid_repl_tbl;
 
 
@@ -665,6 +661,8 @@ CREATE SEQUENCE charge_num;
 
 CREATE TABLE charge_tbl(
   charge_num number(10,0) PRIMARY KEY,
+  merchant_uid varchar2(100) unique, -- 추가
+  itemname varchar2(100) not null, -- 추가
   charge_date date default sysdate,
   user_num number(10,0), -- fk
   charge_price number(10) not null,
@@ -678,11 +676,7 @@ alter sequence charge_num nocache;
 -- 외래키 설정
 alter table charge_tbl add constraint fk_charge
   foreign key (user_num) references user_tbl(user_num);
-  
--- INSERT 예
-INSERT INTO charge_tbl (charge_num, user_num, charge_price) values
-                      (charge_num.nextval, 1, 500);          
-                      
+           
 -- 조회
 SELECT * FROM charge_tbl;
 
@@ -739,19 +733,19 @@ DROP TABLE user_tbl;
 DROP TABLE auth_tbl;
 DROP TABLE novel_tbl;
 DROP TABLE paid_tbl;
+DROP TABLE paid_repl_tbl;
 DROP TABLE free_tbl;
 DROP TABLE enroll_tbl;
 DROP TABLE enroll_img_tbl;
 DROP TABLE paid_img_tbl;
 DROP TABLE free_img_tbl;
-DROP TABLE prepl_repl_tbl;
 DROP TABLE free_repl_tbl;
 DROP TABLE tourna_tbl;
 DROP TABLE towork_tbl;
 DROP TABLE torec_tbl;
 DROP TABLE favorite_tbl;
-DROP TABLE pbm_tbl;
-DROP TABLE fbm_tbl;
+DROP TABLE pbm_num;
+DROP TABLE free_bookmark_tbl;
 DROP TABLE charge_tbl;
 DROP TABLE coupon_tbl;
 DROP TABLE use_tbl;
@@ -763,15 +757,18 @@ DROP SEQUENCE auth_num;
 DROP SEQUENCE novel_num;
 DROP SEQUENCE paid_num;
 DROP SEQUENCE paid_snum;
+DROP SEQUENCE prepl_num;
 DROP SEQUENCE free_num;
 DROP SEQUENCE free_snum;
-DROP SEQUENCE free_board_num;
-DROP SEQUENCE repl_sort_num;
-DROP SEQUENCE repl_num;
+DROP SEQUENCE enroll_num;
+DROP SEQUENCE frepl_num;
 DROP SEQUENCE to_num;
 DROP SEQUENCE towork_num;
+DROP SEQUENCE torec_num;
 DROP SEQUENCE fav_num;
-DROP SEQUENCE bm_num;
+DROP SEQUENCE pbm_num;
+DROP SEQUENCE fbm_num;
 DROP SEQUENCE charge_num;
 DROP SEQUENCE coupon_num;
 DROP SEQUENCE use_num;
+
