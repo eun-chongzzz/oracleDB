@@ -225,12 +225,8 @@ alter sequence paid_snum nocache;
 
 -- 외래키   
 alter table paid_tbl add constraint fk_paid 
-  foreign key (novel_num) references novel_tbl(novel_num);
-
--- INSERT 예
-INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content) values
-                        (paid_num.nextval, '2', 10,'대현의소설1편','대현이는 소설을 정말 못써');
-                        
+  foreign key (novel_num) references novel_tbl(novel_num);   
+  
 -- 조회
 SELECT * FROM paid_tbl;
 
@@ -248,10 +244,6 @@ CREATE TABLE paid_repl_tbl(
   prepl_rdate date default sysdate,
   prepl_mdate date
 );
-
-
-select * from paid_repl_tbl;
-
 
 -- 시퀀스 해결
 alter sequence prepl_num nocache;

@@ -138,8 +138,6 @@ INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
                         (paid_num.nextval, '15', 2, '더캐슬 2화', '더캐슬2더캐슬2더캐슬2', '더캐슬2더캐슬2더캐슬2'); 
                         
-                                        
-
-                        
+                                    
                         commit;
                         
