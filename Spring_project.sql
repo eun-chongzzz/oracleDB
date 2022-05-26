@@ -673,6 +673,7 @@ alter table charge_tbl add constraint fk_charge
            
 -- 조회
 SELECT * FROM charge_tbl;
+select * from user_tbl;
 
 
 -- ★쿠폰★
@@ -719,7 +720,7 @@ INSERT INTO use_tbl (use_num, user_num, use_type, use_count) values
 -- 조회
 SELECT * FROM use_tbl;
 
-
+select * from user_tbl;
 -------------------------------------------------
 
 -- ※테이블 날리기(역순으로 실행)※ 
