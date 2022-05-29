@@ -35,10 +35,6 @@ SELECT * FROM user_tbl;
 update user_tbl set user_coin = 0, user_coupon =  0 where user_num = 1;
 update user_tbl set user_coin = (user_coin + 100), user_coupon = (user_coupon + 0) where user_num = 1;
 
--- INSERT 예
-INSERT INTO user_tbl (user_num,user_id,user_pw,user_name,user_pnum,user_email) values 
-                  (user_num.nextval,'test3','1234','김대현','01012345678','test@naver.com');
-
 
 -- ★회원등급★   
 -- auto
@@ -55,10 +51,7 @@ alter sequence auth_num nocache;
 
 -- 외래키 설정
 alter table auth_tbl add constraint fk_auth foreign key (user_id) references user_tbl(user_id);
-
--- INSERT 예
-INSERT INTO auth_tbl (auth_num,user_id,auth) values 
-                       (auth_num.nextval,'test3','운영자');         
+     
 -- 조회
 select*from auth_tbl;                                
   
@@ -201,7 +194,7 @@ DELETE FROM novel_tbl WHERE novel_num = 1;
 -- 조회
 SELECT * FROM novel_tbl;
 
-
+SELECT * FROM novel_tbl WHERE (novel_title like '%'||'꽃'||'%') AND novel_week = 'Mon';
 -- ★유료소설★
 -- auto
 CREATE SEQUENCE paid_num;
@@ -231,11 +224,36 @@ alter table paid_tbl add constraint fk_paid
   
 -- 조회
 SELECT * FROM paid_tbl;
+UPDATE paid_tbl SET paid_hit = (paid_hit + 1) WHERE paid_num = 1;
+UPDATE paid_tbl SET paid_hit = 0 WHERE paid_num = 1;
 
+UPDATE paid_tbl SET paid_rec = (paid_rec + 1) WHERE paid_num = 1;
+UPDATE paid_tbl SET paid_rec = 0 WHERE paid_num = 1;
+
+-- ★ 유료소설 추천 테이블
+CREATE SEQUENCE rec_num;
+
+CREATE TABLE paid_rec_tbl(
+  rec_num number(10,0) primary key,
+  user_num number(10,0) not null,
+  paid_num number(10,0) not null
+);
+-- 시퀀스 해결
+alter sequence rec_num nocache;
+
+-- 외래키
+alter table paid_rec_tbl add constraint fk_user_num
+  foreign key (user_num) references user_tbl(user_num);  
+
+alter table paid_rec_tbl add constraint fk_paid_num
+  foreign key (paid_num) references paid_tbl(paid_num);
+  
+  select * from paid_rec_tbl;
+ select * from paid_rec_tbl where paid_num = 2 and user_num = 1;
+delete from paid_rec_tbl;
+commit;
 -- ★ 유료 소설 댓글
-
 CREATE SEQUENCE prepl_num;
-
 
 CREATE TABLE paid_repl_tbl(
   prepl_num number(10,0) PRIMARY KEY,
@@ -288,16 +306,11 @@ alter sequence free_snum nocache;
 -- 외래키   
 alter table free_tbl add constraint fk_free 
   foreign key (novel_num) references novel_tbl(novel_num);
-
--- INSERT 예
-INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content) values
-                        (free_num.nextval, '3', 5,'은총의소설1편','은총이는 소설을 정말 못써'); 
-                        
+  
 -- 조회
 SELECT * FROM free_tbl;
 
 -- 05.18 작가 신청 게시판 & 딸린 첨부파일 게시판
-
 
 -- auto
 CREATE SEQUENCE enroll_num;
@@ -586,36 +599,9 @@ INSERT INTO favorite_tbl (fav_num, novel_num, user_num) values
 -- 조회
 SELECT * FROM favorite_tbl;
 
+delete from favorite_tbl;
 
--- ★유료 책갈피★
--- auto
-CREATE SEQUENCE pbm_num;
-
-CREATE TABLE paid_bookmark_tbl(
-  pbm_num number(10,0) PRIMARY KEY,
-  novel_num number(10,0), -- novel_tbl에서 novel_num fk
-  pbm_paid_num number(10,0), -- paid_tbl에서 paid_num fk
-  user_num number(10,0) -- fk
-);
-
--- 시퀀스 해결
-alter sequence pbm_num nocache;
-
--- 외래키 설정
-alter table bookmark_tbl add constraint fk_bookmark
-  foreign key (novel_num) references novel_tbl(novel_num);
-alter table bookmark_tbl add constraint fk_bookmark_free_num
-  foreign key (pbm_paid_num) references paid_tbl(paid_num);
-  
-alter table bookmark_tbl add constraint fk_bookmark1
-  foreign key (user_num) references user_tbl(user_num);
-  
--- INSERT 예
-INSERT INTO bookmark_tbl (pbm_num, novel_num, pbm_paid_num, user_num) values
-            (pbm_num.nextval, 2, 3, 1);
-            
--- 조회
-SELECT * FROM paid_bookmark_tbl;
+delete from favorite_tbl where novel_num = 7 and user_num =1;
 
 -- ★무료 책갈피★
 -- auto
@@ -629,16 +615,16 @@ CREATE TABLE free_bookmark_tbl(
 );
 
 -- 시퀀스 해결
-alter sequence pbm_num nocache;
+alter sequence fbm_num nocache;
 
 -- 외래키 설정
-alter table bookmark_tbl add constraint fk_bookmark
+alter table free_bookmark_tbl add constraint fk_bookmark
   foreign key (novel_num) references novel_tbl(novel_num);
   
- alter table bookmark_tbl add constraint fk_bookmark_free_num
+ alter table free_bookmark_tbl add constraint fk_bookmark_free_num
   foreign key (fbm_free_num) references free_tbl(free_num);
   
-alter table bookmark_tbl add constraint fk_bookmark1
+alter table free_bookmark_tbl add constraint fk_bookmark1
   foreign key (user_num) references user_tbl(user_num);
   
 -- INSERT 예
@@ -672,9 +658,11 @@ alter table charge_tbl add constraint fk_charge
   foreign key (user_num) references user_tbl(user_num);
            
 -- 조회
-SELECT * FROM charge_tbl;
+select * from charge_tbl;
+SELECT * FROM charge_tbl where user_num = 1 ORDER BY charge_num DESC;
 select * from user_tbl;
 
+commit;
 
 -- ★쿠폰★
 -- auto
@@ -701,10 +689,12 @@ CREATE SEQUENCE use_num;
 CREATE TABLE use_tbl(
   use_num number(10,0) PRIMARY KEY,
   user_num number(10,0), -- fk
+  paid_num number(10,0) not null, --fk 어떤 소설을 구매했는지 (추가)
   use_type varchar2(10) not null,
   use_count number(10) not null,
   use_date date default sysdate
 );
+
 
 -- 시퀀스 해결
 alter sequence use_num nocache;
@@ -713,14 +703,18 @@ alter sequence use_num nocache;
 alter table use_tbl add constraint fk_use
   foreign key (user_num) references user_tbl(user_num);
   
+alter table use_tbl add constraint fk_paidnum
+  foreign key (paid_num) references paid_tbl(paid_num);
 -- INSERT 
 INSERT INTO use_tbl (use_num, user_num, use_type, use_count) values
                     (use_num.nextval, 1, '코인', '100');       
                     
 -- 조회
 SELECT * FROM use_tbl;
-
+select * from use_tbl where user_num = 1 and paid_num = 11;
 select * from user_tbl;
+SELECT u.*, p.paid_title,p.novel_num FROM use_tbl u INNER JOIN paid_tbl p ON u.paid_num = p.paid_num WHERE user_num=1;
+select 
 -------------------------------------------------
 
 -- ※테이블 날리기(역순으로 실행)※ 
