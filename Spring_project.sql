@@ -34,7 +34,7 @@ alter sequence user_num nocache;
 SELECT * FROM user_tbl;
 update user_tbl set user_coin = 0, user_coupon =  0 where user_num = 1;
 update user_tbl set user_coin = (user_coin + 100), user_coupon = (user_coupon + 0) where user_num = 1;
-
+update user_tbl set user_coin = 0, user_coupon =  0;
 
 -- ★회원등급★   
 -- auto
@@ -226,6 +226,9 @@ alter table paid_tbl add constraint fk_paid
 SELECT * FROM paid_tbl;
 UPDATE paid_tbl SET paid_hit = (paid_hit + 1) WHERE paid_num = 1;
 UPDATE paid_tbl SET paid_hit = 0 WHERE paid_num = 1;
+
+update paid_tbl set paid_price = 100;
+commit;
 
 UPDATE paid_tbl SET paid_rec = (paid_rec + 1) WHERE paid_num = 1;
 UPDATE paid_tbl SET paid_rec = 0 WHERE paid_num = 1;
@@ -694,9 +697,10 @@ CREATE TABLE use_tbl(
   use_count number(10) not null,
   use_date date default sysdate
 ); 
-drop table use_tbl;
+delete from use_tbl;
+
 select * from use_tbl where user_num = 1 and paid_num = 1;
-commit;
+
 -- 시퀀스 해결
 alter sequence use_num nocache;
 select * from use_tbl;
@@ -710,7 +714,7 @@ alter table use_tbl add constraint fk_paidnum
 INSERT INTO use_tbl (use_num, user_num, use_type, use_count) values
                     (use_num.nextval, 1, '코인', '100');       
 select * from favorite_tbl;
-delete from favorite_tbl;
+
 commit;
 -- 조회
 SELECT * FROM use_tbl;
