@@ -413,7 +413,7 @@ ALTER TABLE free_img_tbl ADD CONSTRAINT fk_free_attach FOREIGN KEY(free_num) REF
 
 SELECT * FROM free_img_tbl;
 
-commit;         
+      
          
 
 -- ★ 무료 소설 댓글
@@ -693,12 +693,13 @@ CREATE TABLE use_tbl(
   use_type varchar2(10) not null,
   use_count number(10) not null,
   use_date date default sysdate
-);
-
-
+); 
+drop table use_tbl;
+select * from use_tbl where user_num = 1 and paid_num = 1;
+commit;
 -- 시퀀스 해결
 alter sequence use_num nocache;
-
+select * from use_tbl;
 -- 외래키 설정
 alter table use_tbl add constraint fk_use
   foreign key (user_num) references user_tbl(user_num);
@@ -708,13 +709,18 @@ alter table use_tbl add constraint fk_paidnum
 -- INSERT 
 INSERT INTO use_tbl (use_num, user_num, use_type, use_count) values
                     (use_num.nextval, 1, '코인', '100');       
-                    
+select * from favorite_tbl;
+delete from favorite_tbl;
+commit;
 -- 조회
 SELECT * FROM use_tbl;
 select * from use_tbl where user_num = 1 and paid_num = 11;
 select * from user_tbl;
 SELECT u.*, p.paid_title,p.novel_num FROM use_tbl u INNER JOIN paid_tbl p ON u.paid_num = p.paid_num WHERE user_num=1;
-select 
+SELECT * FROM favorite_tbl WHERE novel_num = 1 and user_num = (select user_num from user_tbl
+				WHERE user_id='user0');
+
+
 -------------------------------------------------
 
 -- ※테이블 날리기(역순으로 실행)※ 
