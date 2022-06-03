@@ -137,7 +137,7 @@ INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,
                         (paid_num.nextval, '15', 1, '더캐슬 1화', '더캐슬더캐슬더캐슬', '더캐슬더캐슬더캐슬');
 INSERT INTO paid_tbl (paid_num, novel_num, paid_snum, paid_title, paid_content1,paid_content2) values
                         (paid_num.nextval, '15', 2, '더캐슬 2화', '더캐슬2더캐슬2더캐슬2', '더캐슬2더캐슬2더캐슬2'); 
-                        
+                        commit;
  -------------------------------------------------------------------------------------------------------------------                                   
 INSERT INTO free_tbl (free_num, novel_num, free_snum, free_title, free_content1,free_content2) values
                         (free_num.nextval,'16',1,'전지적 독자 시점_1부1화','평범한 회사원 김독자가 자신이 10년 넘게 읽던 소설이 현실이 되고','격변한 세상 속에서 자신이 원하는 결말을 보기 위해 고군분투하는 이야기를 다룬다');

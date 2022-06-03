@@ -75,7 +75,7 @@ CREATE TABLE novel_tbl(
 
 -- 시퀀스 해결
 alter sequence novel_num nocache; 
-
+select * from novel_tbl;
 -- INSERT 예
 -- ★ 유료 소설 데이터 적재 
 INSERT INTO novel_tbl (novel_num, novel_writer, user_id, novel_title, novel_tsnum, novel_category, novel_week) values
@@ -213,7 +213,7 @@ CREATE TABLE paid_tbl(
     paid_rec number(10,0) default 0,
     paid_price number(10,0) default 1
     );
-    
+    DELETE FROM paid_tbl WHERE paid_snum = #{paid_snum}
 -- 시퀀스 해결
 alter sequence paid_num nocache;
 alter sequence paid_snum nocache;
@@ -227,9 +227,9 @@ SELECT * FROM paid_tbl;
 UPDATE paid_tbl SET paid_hit = (paid_hit + 1) WHERE paid_num = 1;
 UPDATE paid_tbl SET paid_hit = 0 WHERE paid_num = 1;
 
-update paid_tbl set paid_price = 100;
+select * from user_tbl;
 commit;
-
+delete 
 UPDATE paid_tbl SET paid_rec = (paid_rec + 1) WHERE paid_num = 1;
 UPDATE paid_tbl SET paid_rec = 0 WHERE paid_num = 1;
 
